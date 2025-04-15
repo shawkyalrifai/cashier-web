@@ -1,0 +1,71 @@
+package cashier.system.service;
+
+import cashier.system.dto.ProductDTO;
+import cashier.system.entity.Product;
+import cashier.system.mapper.ProductMapper;
+import cashier.system.repository.ProductRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+
+
+    private final ProductMapper productMapper;
+
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+    }
+
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+
+
+    public ProductDTO getById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        return productMapper.toDto(product);
+    }
+    private Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    }
+    public ProductDTO create(ProductDTO productDTO) {
+        Product product = productMapper.toEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDto(savedProduct);
+    }
+
+    public ProductDTO update(Long id, ProductDTO updatedDTO) {
+        Product existing = getProductById(id);
+        existing.setName(updatedDTO.getName());
+        existing.setPrice(updatedDTO.getPrice());
+        existing.setStock(updatedDTO.getStock());
+        existing.setBarcode(updatedDTO.getBarcode());
+        Product saved = productRepository.save(existing);
+        return productMapper.toDto(saved);
+    }
+    public void delete(Long id) {
+        productRepository.deleteById(id);
+    }
+
+
+        public Optional<ProductDTO> searchProduct(String keyword) {
+            Optional<Product> found;
+            try {
+                Long id = Long.parseLong(keyword);
+                found = productRepository.findById(id);
+            } catch (NumberFormatException e) {
+                found = productRepository.findByNameIgnoreCase(keyword)
+                        .or(() -> productRepository.findByBarcode(keyword));
+            }
+            return found.map(productMapper::toDto);
+        }
+}
+
