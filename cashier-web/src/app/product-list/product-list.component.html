@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Product Management</h2>
+  
+    <div class="mb-3 d-flex">
+      <input
+        class="form-control me-2"
+        placeholder="Search product..."
+        [(ngModel)]="keyword"
+        (keyup.enter)="search()" />
+        <button class="btn btn-outline-primary" (click)="search()" [disabled]="!keyword">Search</button>
+        <div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>
+
+    </div>
+  
+    <form (ngSubmit)="save()" class="card p-3 mb-4 shadow-sm">
+      <h5>{{ isEditing ? 'Edit Product' : 'Add New Product' }}</h5>
+      <div class="mb-3">
+        <input class="form-control" placeholder="Product Name" [(ngModel)]="selectedProduct.name" name="name" required />
+      </div>
+      <div class="mb-3">
+        <input type="number" class="form-control" placeholder="Price" [(ngModel)]="selectedProduct.price" name="price" required />
+      </div>
+      <div class="mb-3">
+        <input type="number" class="form-control" placeholder="Stock" [(ngModel)]="selectedProduct.stock" name="stock" required />
+      </div>
+      <button type="submit" class="btn btn-success me-2">{{ isEditing ? 'Update' : 'Create' }}</button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      <div *ngIf="error" class="text-danger mt-2">{{ error }}</div>
+    </form>
+  
+    <table class="table table-bordered table-striped shadow-sm">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>BarCode</th>
+          <th>Stock Size</th>
+          <th style="width: 160px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.barcode}}</td>
+          <td>{{ product.stock}}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="edit(product)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="delete(product.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

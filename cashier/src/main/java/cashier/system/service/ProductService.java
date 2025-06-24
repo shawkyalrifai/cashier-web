@@ -4,12 +4,14 @@ import cashier.system.dto.ProductDTO;
 import cashier.system.entity.Product;
 import cashier.system.mapper.ProductMapper;
 import cashier.system.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -17,10 +19,6 @@ public class ProductService {
 
     private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-    }
 
     public List<Product> getAll() {
         return productRepository.findAll();
@@ -37,6 +35,12 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
     public ProductDTO create(ProductDTO productDTO) {
+        if (productRepository.existsByName(productDTO.getName())) {
+            throw new IllegalArgumentException("Product name must be unique.");
+        }
+        if (productRepository.existsByBarcode(productDTO.getBarcode())) {
+            throw new IllegalArgumentException("Product barcode must be unique.");
+        }
         Product product = productMapper.toEntity(productDTO);
         Product savedProduct = productRepository.save(product);
         return productMapper.toDto(savedProduct);

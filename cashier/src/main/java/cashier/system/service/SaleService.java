@@ -9,6 +9,7 @@ import cashier.system.exception.ResourceNotFoundException;
 import cashier.system.repository.ProductRepository;
 import cashier.system.repository.SaleRepository;
 import cashier.system.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +19,15 @@ import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-
+@AllArgsConstructor
 @Service
 public class SaleService {
-@Autowired
-    private SaleRepository saleRepository;
-@Autowired
-    private  UserRepository userRepository;
-@Autowired
-    private  ProductRepository productRepository;
+
+    private final SaleRepository saleRepository;
+
+    private  final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
 
     public Sale createSale(SaleRequestDTO dto) {
         User cashier = userRepository.findById(dto.cashierId)
@@ -79,64 +80,11 @@ public class SaleService {
     }
 
 
-
-    public BigDecimal getSalesTotalForDay(LocalDate date) {
-        // Calculate the start and end of the day
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
-
-        // Get all sales for the day
-        List<Sale> sales = saleRepository.findBySaleDateBetween(startOfDay, endOfDay);
-
-        // Sum up the total sales amount for the day
+    public BigDecimal getSalesTotalBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<Sale> sales = saleRepository.findBySaleDateBetween(startDateTime, endDateTime);
         return sales.stream()
-                .map(Sale::getTotalAmount)  // Get the BigDecimal totalAmount of each sale
-                .reduce(BigDecimal.ZERO, BigDecimal::add);  // Sum the BigDecimal values
+                .map(Sale::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-
-    public BigDecimal getSalesTotalByWeek(LocalDate date) {
-        // Calculate the start and end of the week
-        WeekFields weekFields = WeekFields.of(java.util.Locale.getDefault());
-        LocalDate startOfWeek = date.with(weekFields.dayOfWeek(), 1); // Monday of the week
-        LocalDate endOfWeek = startOfWeek.plusWeeks(1).minusDays(1); // Sunday of the week
-
-        // Convert LocalDate to LocalDateTime for querying the database
-        LocalDateTime startOfWeekTime = startOfWeek.atStartOfDay();
-        LocalDateTime endOfWeekTime = endOfWeek.atTime(23, 59, 59);
-
-        // Fetch sales data within the week range
-        List<Sale> sales = saleRepository.findBySaleDateBetween(startOfWeekTime, endOfWeekTime);
-
-        // Sum up the total sales amount for the week
-        BigDecimal totalSales = sales.stream()
-                .map(Sale::getTotalAmount) // Get the totalAmount for each sale
-                .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum them up
-
-        return totalSales;
-    }
-
-
-
-    public BigDecimal getSalesTotalByMonth(int year, int month) {
-        // Calculate the start and end of the month
-        LocalDate startOfMonth = LocalDate.of(year, month, 1);
-        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
-
-        // Convert LocalDate to LocalDateTime for querying the database
-        LocalDateTime startOfMonthTime = startOfMonth.atStartOfDay();
-        LocalDateTime endOfMonthTime = endOfMonth.atTime(23, 59, 59);
-
-        // Fetch sales data within the month range
-        List<Sale> sales = saleRepository.findBySaleDateBetween(startOfMonthTime, endOfMonthTime);
-
-        // Sum up the total sales amount for the month
-        BigDecimal totalSales = sales.stream()
-                .map(Sale::getTotalAmount) // Get the totalAmount for each sale
-                .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum them up
-
-        return totalSales;
-    }
-
 
 }

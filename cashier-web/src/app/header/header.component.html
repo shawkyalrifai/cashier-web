@@ -1,0 +1,27 @@
+
+
+<nav *ngIf="!isLoggedIn">
+  <div class="logo">NTG</div>
+  <ul>
+    <li routerLink="/register" routerLinkActive="active">Register</li>
+    <li routerLink="/login" routerLinkActive="active">Login</li>
+  </ul>
+</nav>
+<!--
+<nav  *ngif="isAdminLoggedIn">
+  <div class="logo">NTG</div>
+  <div class="links">
+    <ul>
+      <li routerLink="/student-list" routerLinkActive="active">Student list</li>
+        <li routerLink="/course-list" routerLinkActive="active">Course List</li>
+        <li routerLink="/add-student" routerLinkActive="active">Add Student</li>
+        <li routerLink="/add-course" routerLinkActive="active">Add Course </li>
+
+
+    </ul>
+  </div>
+  <button (click)="logout()"> Loguot </button>
+</nav> -->
+
+
+

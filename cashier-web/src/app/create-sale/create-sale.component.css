@@ -1,0 +1,30 @@
+.container {
+    max-width: 900px;
+  }
+  
+  .card {
+    border-radius: 12px;
+  }
+  
+  h2 {
+    font-weight: 600;
+  }
+  
+  table th,
+  table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  input[type="number"] {
+    text-align: center;
+  }
+  .text-danger {
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+  
+  input[disabled] {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+  }

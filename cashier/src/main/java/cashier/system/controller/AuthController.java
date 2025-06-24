@@ -7,6 +7,7 @@ import cashier.system.entity.User;
 import cashier.system.enums.Role;
 import cashier.system.jwt.JwtUtil;
 import cashier.system.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@AllArgsConstructor
 public class AuthController {
     private final AuthenticationManager authManager;
     private final MyUserDetailsService userDetailsService;
@@ -26,12 +28,7 @@ public class AuthController {
 
     private final UserRepository userRepository;
 
-    public AuthController(AuthenticationManager authManager, MyUserDetailsService userDetailsService, JwtUtil jwtUtil, UserRepository userRepository) {
-        this.authManager = authManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         authManager.authenticate(

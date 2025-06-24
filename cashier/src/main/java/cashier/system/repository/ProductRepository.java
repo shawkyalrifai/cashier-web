@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) = LOWER(:keyword) OR CAST(p.id AS string) = :keyword OR p.barcode = :keyword")
     Optional<Product> searchByKeyword(@Param("keyword") String keyword);
+    boolean existsByName(String name);
+    boolean existsByBarcode(String barcode);
 }

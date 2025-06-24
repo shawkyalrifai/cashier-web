@@ -1,0 +1,87 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Sales Management</h2>
+  
+    <!-- Error Message -->
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+  
+    <!-- 🔍 Search Sale by ID -->
+    <div class="card p-3 mb-4 shadow-sm">
+      <h5 class="mb-3">Search Sale by ID</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="number" class="form-control" placeholder="Enter Sale ID" [(ngModel)]="saleId">
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100" (click)="getSaleById()">Search</button>
+        </div>
+      </div>
+  
+      <!-- Result -->
+      <div *ngIf="selectedSale" class="mt-3 border-top pt-3">
+        <p><strong>Sale ID:</strong> {{ selectedSale.id }}</p>
+        <p><strong>Cashier:</strong> {{ selectedSale.cashier?.username }}</p>
+        <p><strong>Date:</strong> {{ selectedSale.saleDate | date: 'short' }}</p>
+        <p><strong>Total Amount:</strong> {{ selectedSale.totalAmount | currency }}</p>
+        <h6>Items:</h6>
+        <ul class="list-unstyled">
+          <li *ngFor="let item of selectedSale.items">
+            {{ item.product.name }} × {{ item.quantity }} = {{ item.subtotal | currency }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- 📆 Total Sales Between Dates -->
+    <div class="card p-3 mb-4 shadow-sm">
+      <h5 class="mb-3">Calculate Total Sales</h5>
+      <div class="row g-2">
+        <div class="col-md-4">
+          <label>Start Date</label>
+          <input type="date" class="form-control" [(ngModel)]="startDate">
+        </div>
+        <div class="col-md-4">
+          <label>End Date</label>
+          <input type="date" class="form-control" [(ngModel)]="endDate">
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-success w-100" (click)="getTotalSalesBetween()">Calculate</button>
+        </div>
+      </div>
+  
+      <div *ngIf="totalSales !== null" class="mt-3 fs-5">
+        ✅ <strong>Total Sales:</strong> {{ totalSales | currency }}
+      </div>
+    </div>
+  
+    <!-- 📋 All Sales Table -->
+    <div class="card p-3 shadow-sm">
+      <h5 class="mb-3">All Sales</h5>
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Cashier</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Items</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of sales">
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.cashier?.username }}</td>
+            <td>{{ sale.saleDate | date: 'short' }}</td>
+            <td>{{ sale.totalAmount | currency }}</td>
+            <td>
+              <ul class="list-unstyled mb-0">
+                <li *ngFor="let item of sale.items">
+                  {{ item.product.name }} × {{ item.quantity }}
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

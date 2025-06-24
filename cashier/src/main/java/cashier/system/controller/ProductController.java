@@ -3,6 +3,7 @@ package cashier.system.controller;
 import cashier.system.dto.ProductDTO;
 import cashier.system.entity.Product;
 import cashier.system.service.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
+@AllArgsConstructor
 public class ProductController {
-    @Autowired
-    private ProductService productService;
+
+   private final ProductService productService;
+//    @Autowired
+//    private ProductService productService;
     @GetMapping
     public List<Product> getAll() {
         return productService.getAll();
@@ -43,6 +47,7 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         productService.delete(id);
     }
+
     @GetMapping("/search")
     public ResponseEntity<?> searchProduct(@RequestParam("keyword") String keyword) {
         Optional<ProductDTO> product = productService.searchProduct(keyword);

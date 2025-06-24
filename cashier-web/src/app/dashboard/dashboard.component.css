@@ -1,0 +1,48 @@
+.dashboard-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1f2937;
+  padding: 10px 20px;
+  color: white;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.navbar-center a,
+.navbar-right a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-center a.active,
+.navbar-right a.active {
+  font-weight: bold;
+  border-bottom: 2px solid #10b981;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.logout-btn {
+  margin-left: 10px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dashboard-content {
+  padding: 20px;
+}
