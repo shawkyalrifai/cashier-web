@@ -1,28 +1,28 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Sales Management</h2>
+    <h2 class="text-center mb-4">{{'SALES_MANAGEMENT' | translate}}</h2>
   
     <!-- Error Message -->
     <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
   
-    <!-- 🔍 Search Sale by ID -->
+    <!--  Search Sale by ID -->
     <div class="card p-3 mb-4 shadow-sm">
-      <h5 class="mb-3">Search Sale by ID</h5>
+      <h5 class="mb-3">{{'SEARCH_SALE_BY_ID' | translate}}</h5>
       <div class="row">
         <div class="col-md-6">
-          <input type="number" class="form-control" placeholder="Enter Sale ID" [(ngModel)]="saleId">
+          <input type="number" class="form-control" placeholder="{{'ENTER_SALE_ID' |translate}}" [(ngModel)]="saleId">
         </div>
         <div class="col-md-3">
-          <button class="btn btn-primary w-100" (click)="getSaleById()">Search</button>
+          <button class="btn btn-primary w-100" (click)="getSaleById()">{{'SEARCH' |translate}}</button>
         </div>
       </div>
   
       <!-- Result -->
       <div *ngIf="selectedSale" class="mt-3 border-top pt-3">
         <p><strong>Sale ID:</strong> {{ selectedSale.id }}</p>
-        <p><strong>Cashier:</strong> {{ selectedSale.cashier?.username }}</p>
-        <p><strong>Date:</strong> {{ selectedSale.saleDate | date: 'short' }}</p>
+        <p><strong>{{'CASHIER' | translate}}:</strong> {{ selectedSale.cashier?.username }}</p>
+        <p><strong>{{'DATE' | translate}}:</strong> {{ selectedSale.saleDate | date: 'short' }}</p>
         <p><strong>Total Amount:</strong> {{ selectedSale.totalAmount | currency }}</p>
-        <h6>Items:</h6>
+        <h6>{{'ITEMS'| translate}}</h6>
         <ul class="list-unstyled">
           <li *ngFor="let item of selectedSale.items">
             {{ item.product.name }} × {{ item.quantity }} = {{ item.subtotal | currency }}
@@ -31,9 +31,9 @@
       </div>
     </div>
   
-    <!-- 📆 Total Sales Between Dates -->
+    <!-- Total Sales Between Dates -->
     <div class="card p-3 mb-4 shadow-sm">
-      <h5 class="mb-3">Calculate Total Sales</h5>
+      <h5 class="mb-3">{{'CALCULATE_TOTAL_SALES'| translate}}</h5>
       <div class="row g-2">
         <div class="col-md-4">
           <label>Start Date</label>
@@ -44,26 +44,26 @@
           <input type="date" class="form-control" [(ngModel)]="endDate">
         </div>
         <div class="col-md-4 d-flex align-items-end">
-          <button class="btn btn-success w-100" (click)="getTotalSalesBetween()">Calculate</button>
+          <button class="btn btn-success w-100" (click)="getTotalSalesBetween()">{{'CALCULATE' |translate}}</button>
         </div>
       </div>
   
       <div *ngIf="totalSales !== null" class="mt-3 fs-5">
-        ✅ <strong>Total Sales:</strong> {{ totalSales | currency }}
+         <strong>Total Sales:</strong> {{ totalSales | currency }}
       </div>
     </div>
   
-    <!-- 📋 All Sales Table -->
+    <!--  All Sales Table -->
     <div class="card p-3 shadow-sm">
-      <h5 class="mb-3">All Sales</h5>
+      <h5 class="mb-3">{{'ALL_SALES' |translate}}</h5>
       <table class="table table-bordered table-hover">
         <thead class="table-light">
           <tr>
-            <th>ID</th>
-            <th>Cashier</th>
-            <th>Date</th>
-            <th>Total</th>
-            <th>Items</th>
+            <th>{{'ID' | translate}}</th>
+            <th>{{'CASHIER' | translate}}</th>
+            <th>{{'DATE' | translate}}</th>
+            <th>{{'TOTAL' |translate}}</th>
+            <th>{{'ITEMS' | translate}}</th>
           </tr>
         </thead>
         <tbody>

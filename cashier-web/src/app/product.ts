@@ -5,4 +5,6 @@ export interface Product {
   available: boolean;
   price: number;
   stock: number;
+  photo?: Uint8Array;
+  photoBase64?: string;
 }

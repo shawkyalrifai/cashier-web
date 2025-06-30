@@ -6,7 +6,9 @@ import cashier.system.mapper.ProductMapper;
 import cashier.system.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +22,21 @@ public class ProductService {
     private final ProductMapper productMapper;
 
 
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public List<ProductDTO> getAll() {
+        return productRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .toList();
     }
-
+    private ProductDTO mapToDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setPrice(product.getPrice());
+        dto.setStock(product.getStock());
+        dto.setBarcode(product.getBarcode());
+        dto.setPhoto(product.getPhoto());
+        return dto;
+    }
 
     public ProductDTO getById(Long id) {
         Product product = productRepository.findById(id)
@@ -34,7 +47,9 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
-    public ProductDTO create(ProductDTO productDTO) {
+    public ProductDTO create(ProductDTO productDTO, MultipartFile multipartFile) throws IOException {
+
+
         if (productRepository.existsByName(productDTO.getName())) {
             throw new IllegalArgumentException("Product name must be unique.");
         }
@@ -42,6 +57,9 @@ public class ProductService {
             throw new IllegalArgumentException("Product barcode must be unique.");
         }
         Product product = productMapper.toEntity(productDTO);
+        if (multipartFile != null) {
+            product.setPhoto(multipartFile.getBytes());
+        }
         Product savedProduct = productRepository.save(product);
         return productMapper.toDto(savedProduct);
     }

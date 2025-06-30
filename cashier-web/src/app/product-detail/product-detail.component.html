@@ -1,0 +1,29 @@
+<div *ngIf="product" class="container mt-5 pt-5">
+  <div class="card shadow-lg p-4 rounded">
+    <div class="row g-4 align-items-center">
+      <div class="col-md-4 text-center">
+        <img 
+          [src]="'data:image/jpeg;base64,' + product.photoBase64" 
+          alt="{{ product.name }}" 
+          class="img-fluid rounded-3 border"
+          style="max-height: 250px; object-fit: cover;" />
+      </div>
+      <div class="col-md-8">
+        <h2 class="mb-3">{{ product.name }}</h2>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>Price:</strong> 
+            <span class="text-success">{{ product.price | currency:'USD' }}</span>
+          </li>
+          <li class="list-group-item">
+            <strong>Stock:</strong> {{ product.stock }}
+          </li>
+          <li class="list-group-item">
+            <strong>Barcode:</strong> {{ product.barcode }}
+          </li>
+        </ul>
+        <button class="btn btn-primary mt-4" routerLink="/listProducts">Back to Products</button>
+      </div>
+    </div>
+  </div>
+</div>

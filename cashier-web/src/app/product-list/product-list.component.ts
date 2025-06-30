@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -17,11 +18,24 @@ export class ProductListComponent {
   isEditing = false;
   error = '';
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private router:Router) {}
 
   ngOnInit(): void {
     this.loadProducts();
   }
+ getImageSrc(photo: Uint8Array): string | null {
+  if (!photo || photo.length === 0) return null;
+
+  try {
+    const base64String = btoa(
+      Array.from(photo).map(byte => String.fromCharCode(byte)).join('')
+    );
+    return `data:image/jpeg;base64,${base64String}`;
+  } catch (e) {
+    console.error('Error converting image:', e);
+    return null;
+  }
+}
 
   loadProducts(): void {
     this.productService.getAll().subscribe({
@@ -31,7 +45,7 @@ export class ProductListComponent {
   }
 
   search(): void {
-    this.error = ''; // clear previous error
+    this.error = ''; 
   
     if (!this.keyword) {
       this.loadProducts();
@@ -45,13 +59,16 @@ export class ProductListComponent {
       },
       error: err => {
         if (err.status === 404) {
-          this.products = []; // clear old products
+          this.products = [];
           this.error = err.error?.message || 'Product not found';
         } else {
           this.error = 'Search failed. Please try again.';
         }
       }
     });
+  }
+ viewProductDetails(productId: number): void {
+    this.router.navigate(['/product', productId]);
   }
 
   save(): void {

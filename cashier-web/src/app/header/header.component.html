@@ -1,27 +1,69 @@
+<!-- Not logged in navbar -->
+<nav *ngIf="!isLoggedIn" class="public-navbar">
+  <div class="navbar-left">
+    <div class="logo">NTG</div>
+  </div>
 
-
-<nav *ngIf="!isLoggedIn">
-  <div class="logo">NTG</div>
-  <ul>
-    <li routerLink="/register" routerLinkActive="active">Register</li>
-    <li routerLink="/login" routerLinkActive="active">Login</li>
-  </ul>
-</nav>
-<!--
-<nav  *ngif="isAdminLoggedIn">
-  <div class="logo">NTG</div>
-  <div class="links">
+  <div class="navbar-center">
     <ul>
-      <li routerLink="/student-list" routerLinkActive="active">Student list</li>
-        <li routerLink="/course-list" routerLinkActive="active">Course List</li>
-        <li routerLink="/add-student" routerLinkActive="active">Add Student</li>
-        <li routerLink="/add-course" routerLinkActive="active">Add Course </li>
-
-
+      <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+      <li><a routerLink="/register" routerLinkActive="active">Register</a></li>
+      <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
     </ul>
   </div>
-  <button (click)="logout()"> Loguot </button>
-</nav> -->
 
+  <div class="navbar-right">
+    <div class="lang-switch">
+      <button (click)="switchLang('en')">EN</button>
+      <button (click)="switchLang('ar')">AR</button>
+    </div>
+  </div>
+</nav>
 
+<!-- Logged in layout -->
+<ng-container *ngIf="isLoggedIn">
+  <!-- If on dashboard -->
+  <nav *ngIf="isDashboardPage(); else backBtn" class="dashboard-navbar">
+    <div class="navbar-left">
+      <div class="logo">NTG</div>
+    </div>
 
+    <div class="navbar-center">
+      <a routerLink="/listSales" routerLinkActive="active">{{'LIST_SALES' | translate}}</a>
+      <a routerLink="/createSale" routerLinkActive="active">{{'CREATE_ORDER'| translate}}</a>
+
+      <!-- Only for admin -->
+      <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/createProduct" routerLinkActive="active">{{'CREATE_PRODUCT' | translate}}</a>
+      <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/listProducts" routerLinkActive="active">{{'LIST_PRODUCTS' | translate}}</a>
+    </div>
+
+    <div class="navbar-right">
+      <span class="welcome-text">{{ 'WELCOME' | translate }}, {{ username }}</span>
+      <div class="lang-switch">
+        <button (click)="switchLang('en')">EN</button>
+        <button (click)="switchLang('ar')">AR</button>
+      </div>
+      <button class="logout-btn" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
+    </div>
+  </nav>
+
+  <!-- If NOT on dashboard -->
+  <ng-template #backBtn>
+    <nav class="dashboard-navbar">
+      <div class="navbar-left">
+        <div class="logo">NTG</div>
+      </div>
+      <div class="navbar-center">
+        <a routerLink="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
+      </div>
+      <div class="navbar-right">
+        <span class="welcome-text">{{ 'WELCOME' | translate }}, {{ username }}</span>
+        <div class="lang-switch">
+          <button (click)="switchLang('en')">EN</button>
+          <button (click)="switchLang('ar')">AR</button>
+        </div>
+        <button class="logout-btn" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
+      </div>
+    </nav>
+  </ng-template>
+</ng-container>

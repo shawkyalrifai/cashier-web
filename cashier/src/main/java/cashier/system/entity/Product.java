@@ -26,4 +26,7 @@ public class Product {
 
     private BigDecimal price;
     private int stock;
+
+    @Column(name = "photo", columnDefinition = "MEDIUMBLOB")
+    private byte[] photo;
 }

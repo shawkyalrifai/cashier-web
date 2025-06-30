@@ -1,36 +1,123 @@
-nav{
+/* Common styles */
+html, body {
+  margin: 0;
+  height: 100%;
+   overflow-x: hidden; 
+}
+router-outlet + * {
+  margin-top: 60px; /* to push content below navbar */
+}
+/* Common styles */
+nav {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 3rem;
-align-items: center;
-background-color: green;
-color: #fff;
-
-}
-nav ul{
-  display: flex;
   align-items: center;
-  gap: 4rem;
-  list-style: none;
-  margin: 0;
-
+  padding: 1rem 2rem;
+  color: #fff;
 }
-nav ul li{
-  font-size: 18px;
-  font-weight: 600;
+
+/* Public navbar (for login/register) */
+.public-navbar {
+  background-color: rgb(82, 100, 76);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+  
+.public-navbar .logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.public-navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+}
+
+.public-navbar ul li {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.public-navbar ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.public-navbar ul li a.active {
+  border-bottom: 2px solid yellow;
+}
+
+/* Dashboard navbar */
+.dashboard-navbar {
+  background-color: #1f2937;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.dashboard-navbar .logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.navbar-center a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.navbar-center a.active {
+  border-bottom: 2px solid #10b981;
+}
+
+.welcome-text {
+  margin-right: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background-color: #ef4444;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
   cursor: pointer;
 }
-nav .logo{
-  font-size: 20px;
-  font-weight: 600;
+
+:root[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
 }
-nav button{
-  background-color: transparent;
-    color:  white;
-  border-radius: 5px;
-  padding: 1rem 2rem;
+
+:root[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+.lang-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.lang-switch button {
+  padding: 4px 8px;
+  font-size: 12px;
   border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
 }
-.active{
-  color: red;
+
+.lang-switch button:hover {
+  background-color: #f0f0f0;
 }

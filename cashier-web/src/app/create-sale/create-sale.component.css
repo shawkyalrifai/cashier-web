@@ -1,5 +1,6 @@
 .container {
     max-width: 900px;
+    padding-top: 50px;
   }
   
   .card {
@@ -28,3 +29,25 @@
     background-color: #f8d7da;
     border-color: #f5c6cb;
   }
+  .welcome-text {
+  margin-right: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#bill-section {
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  background-color: #fff;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}

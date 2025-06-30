@@ -13,13 +13,22 @@ export class LoginComponent {
   password = '';
   error = '';
 
+
   constructor(private authService: AuthService, private router: Router) {}
+login(): void {
+  this.authService.login({ username: this.username, password: this.password }).subscribe({
+    next: (res) => {
+      if (!res?.token) {
+        this.error = 'Login failed: no token';
+        return;
+      }
 
-  login(): void {
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
-      error: () => this.error = 'Invalid username or password'
-    });
-  }
+      this.authService.loginSuccess(res.token); // ✅ pass token
+      this.router.navigate(['/dashboard']);
+    },
+    error: () => {
+      this.error = 'Invalid username or password';
+    }
+  });
 }
-
+}

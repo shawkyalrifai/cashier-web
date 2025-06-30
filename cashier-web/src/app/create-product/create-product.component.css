@@ -1,5 +1,6 @@
 .container {
     max-width: 600px;
+    padding-top: 50px;
   }
   
   .card {
@@ -13,4 +14,17 @@
   .alert {
     text-align: center;
   }
-  
+  .go-btn {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background-color: #10b981;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.go-btn:hover {
+  background-color: #059669;
+}

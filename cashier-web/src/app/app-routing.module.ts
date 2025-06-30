@@ -7,10 +7,12 @@ import {ProductListComponent} from "./product-list/product-list.component";
 import {ListSaleComponent} from "./list-sale/list-sale.component";
 import {CreateSaleComponent} from "./create-sale/create-sale.component";
 import { CreateProductComponent } from './create-product/create-product.component';
+import { HomeComponent } from './home/home.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  {path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
@@ -19,8 +21,9 @@ const routes: Routes = [
   { path: 'createProduct', component: CreateProductComponent },
   { path: 'listSales', component: ListSaleComponent, },
   { path: 'createSale', component: CreateSaleComponent},
+   { path: 'product/:id', component: ProductDetailComponent },
 
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/home' }
 
 ];
 

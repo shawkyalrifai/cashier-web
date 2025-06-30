@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
+
 @Component
 public class ProductMapper {
 
@@ -18,8 +20,10 @@ public class ProductMapper {
         dto.setPrice(product.getPrice());
         dto.setStock(product.getStock());
         dto.setBarcode(product.getBarcode());
+        dto.setPhoto(product.getPhoto()); // this automatically sets photoBase64
         return dto;
     }
+
 
     // Convert DTO to Entity
     public Product toEntity(ProductDTO dto) {
@@ -31,6 +35,7 @@ public class ProductMapper {
         product.setPrice(dto.getPrice());
         product.setStock(dto.getStock());
         product.setBarcode(dto.getBarcode());
+        product.setPhoto(dto.getPhoto());
         return product;
     }
 }

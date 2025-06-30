@@ -6,9 +6,12 @@ import cashier.system.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,21 +25,26 @@ public class ProductController {
    private final ProductService productService;
 //    @Autowired
 //    private ProductService productService;
-    @GetMapping
-    public List<Product> getAll() {
-        return productService.getAll();
-    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable Long id)
     {
         return new ResponseEntity<>(productService.getById(id), HttpStatus.OK);
     }
+    @GetMapping
+    public List<ProductDTO> getAll() {
+        return productService.getAll();
+    }
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
-         return new ResponseEntity<>(productService.create(productDTO),HttpStatus.OK);
-     }
+    @PostMapping(value = "create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> create(
+            @ModelAttribute ProductDTO productDTO,
+            @RequestPart("multipartFile") MultipartFile multipartFile) throws IOException{
+
+        return new  ResponseEntity<>(productService.create(productDTO,multipartFile),HttpStatus.OK);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductDTO productDTO) {

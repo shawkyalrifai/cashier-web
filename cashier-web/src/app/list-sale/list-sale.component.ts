@@ -44,19 +44,23 @@ export class ListSaleComponent implements OnInit{
     });
   }
 
-  getTotalSalesBetween(): void {
-    if (!this.startDate || !this.endDate) {
-      alert('Please select both start and end dates.');
-      return;
-    }
-
-    const start = `${this.startDate}T00:00:00`;
-    const end = `${this.endDate}T23:59:59`;
-
-    this.saleService.getTotalSalesBetween(start, end).subscribe({
-      next: data => this.totalSales = data.total,
-      error: () => alert('Failed to fetch total sales.')
-    });
+ getTotalSalesBetween(): void {
+  if (!this.startDate || !this.endDate) {
+    alert('Please select both start and end dates.');
+    return;
   }
+
+  const start = `${this.startDate}T00:00:00`;
+  const end = `${this.endDate}T23:59:59`;
+
+  this.saleService.getTotalSalesBetween(start, end).subscribe({
+    next: data => {
+      this.totalSales = data;
+    },
+    error: () => {
+      alert('Failed to fetch total sales.');
+    }
+  });
+}
 
 }
