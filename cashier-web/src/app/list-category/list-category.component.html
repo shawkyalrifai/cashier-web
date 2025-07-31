@@ -1,0 +1,35 @@
+<div class="container mt-5 pt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{{ 'CATEGORIES_LIST' | translate }}</h2>
+    <button class="btn btn-success" [routerLink]="['/createCategory']">
+      + {{ 'ADD_NEW_CATEGORY' | translate }}
+    </button>
+  </div>
+<div class="table-responsive pt-5">
+  <table class="table table-bordered table-hover mt-3" *ngIf="categories.length > 0; else noCategories">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>{{ 'CATEGORY_NAME' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ category.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noCategories>
+  <div class="text-center text-muted py-3">
+    {{ 'NO_CATEGORIES_FOUND' | translate }}
+  </div>
+</ng-template>
+
+<div class="text-end mt-4">
+  <button class="btn btn-primary" [routerLink]="['/createCategory']">
+    {{ 'ADD_NEW_CATEGORY' | translate }}
+  </button>
+</div>
