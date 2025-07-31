@@ -1,7 +1,12 @@
 package cashier.system.controller;
 
 import cashier.system.dto.ProductDTO;
+import cashier.system.entity.Category;
 import cashier.system.entity.Product;
+import cashier.system.mapper.ProductMapper;
+import cashier.system.repository.CategoryRepository;
+import cashier.system.repository.ProductRepository;
+import cashier.system.service.CategoryService;
 import cashier.system.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,9 @@ import java.util.Optional;
 public class ProductController {
 
    private final ProductService productService;
+   private final CategoryRepository categoryRepository;
+   private final ProductRepository productRepository;
+   private final ProductMapper productMapper;
 //    @Autowired
 //    private ProductService productService;
 
@@ -66,6 +74,16 @@ public class ProductController {
             errorResponse.put("message", "Product not found with ID or Name: " + keyword);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+    }
+    @GetMapping("/search/category")
+    public ResponseEntity<List<ProductDTO>> searchProductsByCategory(@RequestParam String name) {
+        Category category = categoryRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        List<Product> products = productRepository.findAllByCategoryId(category.getId());
+        return ResponseEntity.ok(
+                products.stream().map(productMapper::toDto).toList()
+        );
     }
 }
 

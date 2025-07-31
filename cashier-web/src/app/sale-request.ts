@@ -1,13 +1,11 @@
-import {SaleItemRequest} from "./sale-item-request";
+import { SaleItemRequest } from "./sale-item-request";
+
 
 export interface SaleRequest {
 
-  productId: number;
-  quantity: number;
-}
-
-export interface SaleRequest {
-  cashierId: number;
+ customerPhone: string;
+ customerName: String;
   items: SaleItemRequest[];
 }
+
 

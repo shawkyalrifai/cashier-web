@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../product.service';
+import { SupplierService } from '../supplier.service';
+import { CategoryService } from '../category.service';
 
 @Component({
   selector: 'app-create-product',
@@ -12,14 +14,22 @@ export class CreateProductComponent {
     barcode: '',
     price: null,
     stock: null,
-    available: true
+    available: true,
+    supplierId: null,
+    categoryId: null
   };
   selectedFile: File | null = null;
   successMessage = '';
   errorMessage = '';
+  suppliers: any[] = [];
+  categories: any[] = [];
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService ,private supplierService: SupplierService, private categoryService: CategoryService) {}
 
+  ngOnInit(): void {
+  this.supplierService.getAllSupplier().subscribe(data => this.suppliers = data);
+  this.categoryService.getAllCategory().subscribe(data => this.categories = data);
+}
   onFileChange(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -37,13 +47,16 @@ export class CreateProductComponent {
   formData.append('price', this.product.price);
   formData.append('stock', this.product.stock);
   formData.append('available', String(this.product.available));
+  formData.append('supplierId', String(this.product.supplierId ?? 0));
+  formData.append('categoryId', String(this.product.categoryId ?? 0));
   formData.append('multipartFile', this.selectedFile); // match @RequestPart name
+  
 
   this.productService.create(formData).subscribe({
     next: () => {
       this.successMessage = 'Product created successfully!';
       this.errorMessage = '';
-      this.product = { name: '', barcode: '', price: null, stock: null, available: true };
+      this.product = { name: '', barcode: '', price: null, stock: null, available: true , supplierId:null , categoryId:null };
       this.selectedFile = null;
     },
     error: (err) => {

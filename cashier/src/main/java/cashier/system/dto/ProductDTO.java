@@ -20,16 +20,15 @@ public class ProductDTO {
     public BigDecimal price;
     public int stock;
     private String barcode;
-    @JsonIgnore // prevent raw byte array from showing
+    @JsonIgnore
     private byte[] photo;
-
-    // This ensures photoBase64 is included in the response JSON
     @JsonProperty("photoBase64")
-    public String getPhotoBase64() {
-        return (photo != null) ? Base64.getEncoder().encodeToString(photo) : null;
-    }
-
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
+    private String supplierName;
+    private Long supplierId;
+    private String categoryName;
+    private Long categoryId;
 }

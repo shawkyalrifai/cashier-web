@@ -3,6 +3,8 @@ import {ProductService} from "../product.service";
 import {SaleService} from "../sale.service";
 import html2pdf from 'html2pdf.js';
 import { Route, Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { SaleRequest } from '../sale-request';
 @Component({
   selector: 'app-create-sale',
   templateUrl: './create-sale.component.html',
@@ -11,63 +13,82 @@ import { Route, Router } from '@angular/router';
 export class CreateSaleComponent {
 
   products: any[] = [];
-  cashierId: number = 1;
-  bill: any = null; // 👈 for showing the bill
+  cashierUsername: string = '';
+  customerPhone = '';
+  customerName = '';
+  bill: any = null;
   error: string = '';
    username = '';
   constructor(
     private productService: ProductService,
     private saleService: SaleService,
+      private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.productService.getAll().subscribe({
-      next: (data) => {
-        this.products = data.map(p => ({ ...p, quantity: 0 }));
-      },
-      error: () => alert("Failed to load products")
-    });
-     this.username = localStorage.getItem('username') || '';
+  this.productService.getAll().subscribe({
+    next: (data) => {
+      this.products = data.map(p => ({ ...p, quantity: 0 }));
+    },
+    error: () => alert("Failed to load products")
+  });
+
+  const userData = localStorage.getItem('user');
+  this.username = userData ? JSON.parse(userData).username : '';
+}
+
+submitSale(): void {
+  if (!this.customerName || this.customerName.trim().length < 3) {
+    alert("Please enter a valid customer name (at least 3 characters).");
+    return;
   }
 
-  submitSale(): void {
-    const selectedItems = this.products
-      .filter(p => p.quantity > 0 && p.stock > 0)
-      .map(p => ({
-        productId: p.id,
-        quantity: p.quantity
-      }));
+  if (!this.customerPhone || !/^01[0-9]{9}$/.test(this.customerPhone)) {
+    alert("Please enter a valid Egyptian phone number (11 digits, starts with 01).");
+    return;
+  }
 
-    if (selectedItems.length === 0) {
-      alert("Please select at least one product with quantity.");
-      return;
+  const selectedItems = this.products
+    .filter(p => p.quantity > 0 && p.stock > 0)
+    .map(p => ({
+      productId: p.id,
+      quantity: p.quantity,
+      subtotal: p.subtotal
+    }));
+
+  if (selectedItems.length === 0) {
+    alert("Please select at least one product with quantity.");
+    return;
+  }
+
+  const saleRequest: SaleRequest = {
+    customerPhone: this.customerPhone,
+    customerName: this.customerName,
+    items: selectedItems
+  };
+
+  this.saleService.createSale(saleRequest).subscribe({
+    next: (response) => {
+      this.bill = response;
+      this.error = '';
+
+      // clear quantities and update stock
+      this.products.forEach(product => {
+        const soldItem = selectedItems.find(item => item.productId === product.id);
+        if (soldItem) {
+          product.stock -= soldItem.quantity;
+          product.quantity = 0;
+        }
+      });
+    },
+    error: () => {
+      this.error = 'Error creating sale.';
+      this.bill = null;
     }
+  });
+}
 
-    const saleRequest = {
-      cashierId: this.cashierId,
-      items: selectedItems
-    };
-
-    this.saleService.createSale(saleRequest).subscribe({
-      next: (response) => {
-        this.bill = response; 
-        this.error = '';
-      
-        this.products.forEach(product => {
-          const soldItem = selectedItems.find(item => item.productId === product.id);
-          if (soldItem) {
-            product.stock -= soldItem.quantity;
-            product.quantity = 0;
-          }
-        });
-      },
-      error: () => {
-        this.error = 'Error creating sale.';
-        this.bill = null;
-      }
-    });
-  }
 
    downloadPDF(): void {
     const element = document.getElementById('bill-section');

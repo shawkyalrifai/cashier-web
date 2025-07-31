@@ -69,14 +69,17 @@
         <tbody>
           <tr *ngFor="let sale of sales">
             <td>{{ sale.id }}</td>
-            <td>{{ sale.cashier?.username }}</td>
+            <td>{{ sale.cashierUsername }}</td>
             <td>{{ sale.saleDate | date: 'short' }}</td>
             <td>{{ sale.totalAmount | currency }}</td>
+           
             <td>
               <ul class="list-unstyled mb-0">
                 <li *ngFor="let item of sale.items">
-                  {{ item.product.name }} × {{ item.quantity }}
+                  {{ item.product?.name }}  {{ item.quantity }} × {{item.unitPrice}}
+                   <td>{{item.productName}}</td>
                 </li>
+                
               </ul>
             </td>
           </tr>

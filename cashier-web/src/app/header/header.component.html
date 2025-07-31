@@ -25,7 +25,6 @@
   <!-- If on dashboard -->
   <nav *ngIf="isDashboardPage(); else backBtn" class="dashboard-navbar">
     <div class="navbar-left">
-      <div class="logo">NTG</div>
     </div>
 
     <div class="navbar-center">
@@ -35,6 +34,9 @@
       <!-- Only for admin -->
       <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/createProduct" routerLinkActive="active">{{'CREATE_PRODUCT' | translate}}</a>
       <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/listProducts" routerLinkActive="active">{{'LIST_PRODUCTS' | translate}}</a>
+      <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/changeStock" routerLinkActive="active">{{'CHANGE_STOCK' | translate}}</a>
+      <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/listSuppliers" routerLinkActive="active">{{'SUPPLIERS_LIST' | translate}}</a>
+      <a *ngIf="role === 'ROLE_ADMIN'" routerLink="/listCategory" routerLinkActive="active">{{'CATEGORY_LIST' | translate}}</a>
     </div>
 
     <div class="navbar-right">

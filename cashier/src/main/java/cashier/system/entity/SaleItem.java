@@ -1,6 +1,7 @@
 package cashier.system.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,7 +16,6 @@ public class SaleItem {
     private Product product;
 
     @ManyToOne
-    @JsonBackReference
     private Sale sale;
 
     private int quantity;

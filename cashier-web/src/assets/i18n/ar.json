@@ -34,5 +34,17 @@
   "CALCULATE": "احسب",
   "ADD_NEW_PRODUCT": "إدخال منتج جديد",
   "STOCK":"المخزون",
-  "SEARCH_PRODUCT":"بحث عن المنتج"
+  "SEARCH_PRODUCT":"بحث عن المنتج",
+  "CHANGE_STOCK": "تغيير المخزون",
+  "SUPPLIER": "الموردين",
+  "CATEGORY": "الفئه",
+  "CREATE_SUPPLIER": "انشاء مورد جديد",
+  "ADD_NEW_SUPPLIER": "اضافه مورد جديد",
+  "SUPPLIER_NAME": "اسم المورد",
+  "SUPPLIER_PHONE": "تليفون المورد",
+  "SUPPLIERS_LIST":"قائمه الموردين",
+  "CATEGORY_LIST": "قائمه الفئات",
+  "ADD_NEW_CATEGORY":"اضافه فئه جديده",
+  "CATEGORY_NAME": "اسم الفئه"
+
 }

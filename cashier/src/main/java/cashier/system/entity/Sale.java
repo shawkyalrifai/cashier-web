@@ -21,7 +21,8 @@ public class Sale {
     private LocalDateTime saleDate;
     private BigDecimal totalAmount;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleItem> items;
+    private String customerPhone;
+    private String customerName;
 }

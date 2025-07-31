@@ -23,6 +23,21 @@
           <input type="number" class="form-control" id="stock" [(ngModel)]="product.stock" name="stock" required>
         </div>
         
+      <div class="mb-3">
+        <label for="supplier" class="form-label">{{ 'SUPPLIER' | translate }}</label>
+        <select class="form-select" id="supplier" [(ngModel)]="product.supplierId" name="supplierId" required>
+          <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="category" class="form-label">{{ 'CATEGORY' | translate }}</label>
+        <select class="form-select" id="category" [(ngModel)]="product.categoryId" name="categoryId" required>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+      </div>
+
+
             <div class="mb-3">
         <label for="file" class="form-label">{{'PHOTO' |translate}}</label>
         <input type="file" class="form-control" id="file" (change)="onFileChange($event)" required />

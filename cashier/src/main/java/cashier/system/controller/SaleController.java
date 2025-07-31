@@ -1,17 +1,19 @@
 package cashier.system.controller;
 
+import cashier.system.dto.SaleDTO;
 import cashier.system.dto.SaleRequestDTO;
+import cashier.system.dto.SaleResponseDTO;
 import cashier.system.entity.Sale;
 import cashier.system.service.SaleService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 @RestController
@@ -24,18 +26,18 @@ public class SaleController {
     private  final SaleService saleService;
 
     @PostMapping
-    public ResponseEntity<?> createSale(@RequestBody SaleRequestDTO saleRequestDTO) {
-        return new ResponseEntity<>(saleService.createSale(saleRequestDTO),HttpStatus.OK);
+    public ResponseEntity<SaleDTO> createSale(@RequestBody SaleRequestDTO dto,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(saleService.createSale(dto, userDetails.getUsername()));
     }
 
     @GetMapping
-    public List<Sale> getSales() {
-        return saleService.getAllSales();
+    public ResponseEntity<List<SaleResponseDTO>> getAllSales() {
+        return ResponseEntity.ok(saleService.getAllSales());
     }
-
     @GetMapping("/{id}")
-    public Sale getSale(@PathVariable Long id) {
-        return saleService.getSaleById(id);
+    public ResponseEntity<SaleDTO> getSaleById(@PathVariable Long id) {
+        return ResponseEntity.ok(saleService.getSaleById(id));
     }
 
 

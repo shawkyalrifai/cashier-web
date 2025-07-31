@@ -7,4 +7,8 @@ export interface Product {
   stock: number;
   photo?: Uint8Array;
   photoBase64?: string;
+  supplierId?: number;
+  supplierName?: string; 
+  categoryId?: number;
+  categoryName?: string; 
 }

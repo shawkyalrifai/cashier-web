@@ -22,7 +22,7 @@
   "ITEMS": "Items",
   "TOTAL": "Total",
   "DATE": "Date",
-  "CALCULATE_TOTAL_SALES": "Calculate otal sales",
+  "CALCULATE_TOTAL_SALES": "Calculate Total sales",
   "SALES_MANAGEMENT": "Sales Management",
   "ALL_SALES": "All Sales",
   "SEARCH": "Search",
@@ -31,7 +31,19 @@
   "CALCULATE": "Calculate",
   "ADD_NEW_PRODUCT":"Add New Product",
   "STOCK":"Stock",
-  "SEARCH_PRODUCT": "Search_Product"
+  "SEARCH_PRODUCT": "Search_Product",
+  "CHANGE_STOCK": "Change_Stock",
+  "SUPPLIER": "Supplier",
+  "CATEGORY": "Category",
+  "CREATE_SUPPLIER": "Create Supplier",
+  "ADD_NEW_SUPPLIER": "Add New Supplier",
+  "SUPPLIER_NAME": "Supplier Name",
+  "SUPPLIER_PHONE": "Supplier Phone",
+   "SUPPLIERS_LIST": "Suppliers List",
+   "CATEGORY_LIST": "Categories List",
+   "ADD_NEW_CATEGORY": "Add New Category",
+   "CATEGORY_NAME": "Category Name"
+  
 
 
 }

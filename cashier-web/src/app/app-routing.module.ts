@@ -9,6 +9,11 @@ import {CreateSaleComponent} from "./create-sale/create-sale.component";
 import { CreateProductComponent } from './create-product/create-product.component';
 import { HomeComponent } from './home/home.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ChangeStockComponent } from './change-stock/change-stock.component';
+import { SupplierComponent } from './create-supplier/supplier.component';
+import { ListSupplierComponent } from './list-supplier/list-supplier.component';
+import { ListCategoryComponent } from './list-category/list-category.component';
+import { CategoryComponent } from './create-category/category.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -22,6 +27,14 @@ const routes: Routes = [
   { path: 'listSales', component: ListSaleComponent, },
   { path: 'createSale', component: CreateSaleComponent},
    { path: 'product/:id', component: ProductDetailComponent },
+   { path: 'changeStock', component: ChangeStockComponent },
+   { path: 'listSuppliers', component: ListSupplierComponent },
+   { path: 'createSupplier', component: SupplierComponent },
+   { path: 'listCategory', component: ListCategoryComponent },
+   { path: 'createCategory', component: CategoryComponent },
+
+
+
 
   { path: '**', redirectTo: '/home' }
 

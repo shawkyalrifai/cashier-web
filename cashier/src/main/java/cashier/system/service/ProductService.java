@@ -1,9 +1,13 @@
 package cashier.system.service;
 
 import cashier.system.dto.ProductDTO;
+import cashier.system.entity.Category;
 import cashier.system.entity.Product;
+import cashier.system.entity.Supplier;
 import cashier.system.mapper.ProductMapper;
+import cashier.system.repository.CategoryRepository;
 import cashier.system.repository.ProductRepository;
+import cashier.system.repository.SupplierRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,13 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-
+    private final CategoryRepository categoryRepository;
+    private final SupplierRepository supplierRepository;
 
     private final ProductMapper productMapper;
 
@@ -35,6 +41,16 @@ public class ProductService {
         dto.setStock(product.getStock());
         dto.setBarcode(product.getBarcode());
         dto.setPhoto(product.getPhoto());
+        if (product.getSupplier() != null) {
+            dto.setSupplierId(product.getSupplier().getId());
+            dto.setSupplierName(product.getSupplier().getName());
+        }
+
+
+        if (product.getCategory() != null) {
+            dto.setCategoryId(product.getCategory().getId());
+            dto.setCategoryName(product.getCategory().getName());
+        }
         return dto;
     }
 
@@ -56,10 +72,25 @@ public class ProductService {
         if (productRepository.existsByBarcode(productDTO.getBarcode())) {
             throw new IllegalArgumentException("Product barcode must be unique.");
         }
+
+
+        Supplier supplier = supplierRepository.findById(productDTO.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+
         Product product = productMapper.toEntity(productDTO);
-        if (multipartFile != null) {
+
+
+        product.setSupplier(supplier);
+        product.setCategory(category);
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
             product.setPhoto(multipartFile.getBytes());
         }
+
+
         Product savedProduct = productRepository.save(product);
         return productMapper.toDto(savedProduct);
     }
@@ -89,5 +120,16 @@ public class ProductService {
             }
             return found.map(productMapper::toDto);
         }
+
+    public List<ProductDTO> getProductsByCategoryId(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        List<Product> products = productRepository.findAllByCategoryId(category.getId());
+
+        return products.stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
 

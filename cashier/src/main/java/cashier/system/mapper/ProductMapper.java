@@ -20,12 +20,23 @@ public class ProductMapper {
         dto.setPrice(product.getPrice());
         dto.setStock(product.getStock());
         dto.setBarcode(product.getBarcode());
-        dto.setPhoto(product.getPhoto()); // this automatically sets photoBase64
+        dto.setPhoto(product.getPhoto());
+
+        if (product.getSupplier() != null) {
+            dto.setSupplierId(product.getSupplier().getId());
+            dto.setSupplierName(product.getSupplier().getName());
+        }
+
+
+        if (product.getCategory() != null) {
+              dto.setCategoryId(product.getCategory().getId());
+              dto.setCategoryName(product.getCategory().getName());
+        }
         return dto;
     }
 
 
-    // Convert DTO to Entity
+
     public Product toEntity(ProductDTO dto) {
         if (dto == null) return null;
 

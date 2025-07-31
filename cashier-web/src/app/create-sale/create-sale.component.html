@@ -2,74 +2,114 @@
   <div class="card p-4 shadow">
     <h2 class="mb-4 text-center">Create Sale</h2>
 
-    <div class="mb-3 row align-items-center">
-      <label class="col-sm-2 col-form-label">Cashier ID:</label>
-      <div class="col-sm-4">
-        <input type="number" [(ngModel)]="cashierId" class="form-control" />
+    <form #saleForm="ngForm" (ngSubmit)="submitSale()" novalidate>
+      <div class="mb-3 row">
+        <!-- Customer Phone -->
+        <label for="phone" class="col-sm-2 col-form-label">Customer Phone:</label>
+        <div class="col-sm-4">
+          <input
+            type="text"
+            id="phone"
+            name="customerPhone"
+            class="form-control"
+            [(ngModel)]="customerPhone"
+            #phone="ngModel"
+            required
+            pattern="^01[0-9]{9}$"
+          />
+          <div class="text-danger" *ngIf="phone.invalid && phone.touched">
+            <div *ngIf="phone.errors?.['required']">Phone is required.</div>
+            <div *ngIf="phone.errors?.['pattern']">Invalid Egyptian phone number.</div>
+          </div>
+        </div>
+
+        <!-- Customer Name -->
+        <label for="customerName" class="col-sm-2 col-form-label">Customer Name:</label>
+        <div class="col-sm-4">
+          <input
+            type="text"
+            id="customerName"
+            name="customerName"
+            class="form-control"
+            [(ngModel)]="customerName"
+            #name="ngModel"
+            required
+            minlength="3"
+          />
+          <div class="text-danger" *ngIf="name.invalid && name.touched">
+            <div *ngIf="name.errors?.['required']">Name is required.</div>
+            <div *ngIf="name.errors?.['minlength']">At least 3 characters required.</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <table class="table table-hover table-bordered">
-      <thead class="table-light">
-        <tr>
-          <th>Image</th>
-          <th>Product Name</th>
-          <th>Stock</th>
-          <th>Price</th>
-          <th style="width: 120px;">Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of products">
-          <th><img
-      *ngIf="product.photoBase64"
-      [src]="'data:image/jpeg;base64,' + product.photoBase64"
-      alt="Photo"
-      width="50"
-      height="50"
-      style="cursor: pointer; object-fit: cover; border-radius: 4px;"
-      (click)="viewProductDetails(product.id)" /></th>
-          <td>{{ product.name }}</td>
-      
-          <td>
-            <ng-container *ngIf="product.stock > 0; else outOfStock">
-              {{ product.stock }}
-            </ng-container>
-            <ng-template #outOfStock>
-              <span class="text-danger">Product not found (Out of stock)</span>
-            </ng-template>
-          </td>
-      
-          <td>{{ product.price | currency }}</td>
-      
-          <td>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="product.quantity"
-              [max]="product.stock"
-              min="0"
-              [disabled]="product.stock === 0"
-              [ngClass]="{'bg-danger-subtle border-danger': product.stock === 0}"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="table table-hover table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th style="width: 120px;">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>
+              <img
+                *ngIf="product.photoBase64"
+                [src]="'data:image/jpeg;base64,' + product.photoBase64"
+                alt="Product"
+                width="50"
+                height="50"
+                style="object-fit: cover; border-radius: 4px; cursor: pointer;"
+                (click)="viewProductDetails(product.id)"
+              />
+            </td>
+            <td>{{ product.name }}</td>
+            <td>
+              <ng-container *ngIf="product.stock > 0; else outOfStock">
+                {{ product.stock }}
+              </ng-container>
+              <ng-template #outOfStock>
+                <span class="text-danger">Out of stock</span>
+              </ng-template>
+            </td>
+            <td>{{ product.price | currency }}</td>
+            <td>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="product.quantity"
+                [max]="product.stock"
+                min="0"
+                [disabled]="product.stock === 0"
+                [ngClass]="{ 'bg-danger-subtle border-danger': product.stock === 0 }"
+                name="qty-{{product.id}}"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-success" (click)="submitSale()">Submit Sale</button>
-    </div>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-success" type="submit" [disabled]="saleForm.invalid">
+          Submit Sale
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
-
-
+<!-- Receipt -->
 <div *ngIf="bill">
-  <div id="bill-section" class="p-3 border rounded shadow bg-white">
+  <div id="bill-section" class="p-3 border rounded shadow bg-white mt-4">
     <h4 class="text-center">Sale Receipt</h4>
+
     <p><strong>Sale ID:</strong> {{ bill.id }}</p>
     <p><strong>Cashier Name:</strong> {{ username }}</p>
+    <p><strong>Customer Phone:</strong> {{ bill.customerPhone }}</p>
+    <p><strong>Customer Name:</strong> {{ bill.customerName }}</p>
     <p><strong>Date:</strong> {{ bill.saleDate | date: 'short' }}</p>
 
     <table class="table table-bordered mt-3">
@@ -77,15 +117,15 @@
         <tr>
           <th>Product</th>
           <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Subtotal</th>
+          <th>Subtotal per Unit</th>
+          <th>Total Price</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of bill.items">
-          <td>{{ item.product.name }}</td>
+          <td>{{ item.productName }}</td>
           <td>{{ item.quantity }}</td>
-          <td>{{ item.product.price | currency }}</td>
+          <td>{{ (item.subtotal / item.quantity) | currency }}</td>
           <td>{{ item.subtotal | currency }}</td>
         </tr>
       </tbody>
@@ -98,11 +138,8 @@
     </table>
   </div>
 
-  <!-- Buttons -->
   <div class="mt-3 d-flex gap-3">
     <button class="btn btn-success" (click)="downloadPDF()">Download PDF</button>
     <button class="btn btn-primary" (click)="printPDF()">Print PDF</button>
   </div>
 </div>
-
-<div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>

@@ -29,4 +29,12 @@ public class Product {
 
     @Column(name = "photo", columnDefinition = "MEDIUMBLOB")
     private byte[] photo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

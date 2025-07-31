@@ -24,7 +24,9 @@ export class ListSaleComponent implements OnInit{
 
   getAllSales(): void {
     this.saleService.getAllSales().subscribe(
+    
       data => this.sales = data,
+        
       err => this.error = 'Failed to fetch sales.'
     );
   }
